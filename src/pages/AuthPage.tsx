@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
 
 type Mode = 'signin' | 'signup' | 'forgot';
 
 export default function AuthPage() {
+  const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [mode, setMode] = useState<Mode>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,6 +17,13 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  // Redirect to home if already logged in
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate('/');
+    }
+  }, [user, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,6 +77,9 @@ export default function AuthPage() {
             throw error;
           }
         }
+        // Sign in successful, redirect to home after a short delay for visual feedback
+        setSuccess('Signed in successfully! Redirecting...');
+        setTimeout(() => navigate('/'), 1000);
       }
     } catch (err: any) {
       console.error('Auth error:', err);

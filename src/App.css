@@ -1,70 +1,40 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  width: 100%;
+  min-height: 100vh;
 }
 
 /* Global smooth transitions */
 * {
-  transition: colors 300ms;
+  @apply transition-colors duration-300 ease-out;
 }
 
 /* Button and interactive element animations */
 button,
+a,
+input,
+textarea,
+select {
+  @apply transition-all duration-300 ease-out;
+}
+
+button:hover:not(:disabled) {
+  @apply scale-105;
+}
+
+button:active:not(:disabled) {
+  @apply scale-95;
+}
+
+/* Link styling */
 a {
-  transition: all 300ms ease-in-out;
-}
-
-button:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-button:active {
-  transform: scale(0.95);
+  @apply text-primary hover:text-primary/80 transition-colors;
 }
 
 /* Smooth page transitions */
-@keyframes fadeIn {
+@keyframes pageEnter {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -72,12 +42,64 @@ button:active {
   }
 }
 
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
+@keyframes pageExit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }
 
-/* Responsive improvements */
-@media (max-width: 640px) {
+.page-enter {
+  animation: pageEnter 0.4s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.page-exit {
+  animation: pageExit 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+/* Glass morphism button states */
+.btn-glass {
+  @apply glass tap-scale;
+}
+
+.btn-glass:hover {
+  @apply glass-light;
+}
+
+.btn-glass:active {
+  @apply glass-strong;
+}
+
+/* Form styling */
+.form-input {
+  @apply glass;
+  min-height: 48px;
+}
+
+.form-input:focus {
+  @apply glass-light ring-2 ring-primary/20;
+}
+
+/* Disabled states */
+button:disabled,
+input:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* Text selection */
+::selection {
+  background-color: rgba(160, 200, 150, 0.25);
+  color: inherit;
+}
+
+::-moz-selection {
+  background-color: rgba(160, 200, 150, 0.25);
+  color: inherit;
+}
   #root {
     padding: 1rem;
   }

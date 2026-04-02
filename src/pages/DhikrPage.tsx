@@ -98,38 +98,44 @@ export default function DhikrPage() {
 
     return (
       <PageWrapper className="flex flex-col">
-        <header className="mb-10">
-          <h1 className="text-[26px] font-semibold text-foreground tracking-tight">Guided Dhikr</h1>
-          <p className="text-sm text-muted-foreground mt-1.5">Daily remembrance of Allah</p>
-        </header>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 flex-1">
+          <header className="mb-10">
+            <h1 className="text-[26px] font-semibold text-foreground tracking-tight">Guided Dhikr</h1>
+            <p className="text-sm text-muted-foreground mt-1.5 font-medium">Daily remembrance of Allah</p>
+          </header>
 
-        <div className="space-y-3 flex-1">
-          {SESSIONS.map((s, i) => (
-            <motion.button
-              key={s.type}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.06 }}
-              onClick={() => setSession(s)}
-              className={`w-full card-elevated p-6 text-left tap-scale flex items-center justify-between ${
-                s.type === suggestedType ? 'glow-gold' : ''
-              }`}
-            >
-              <div>
-                <p className="text-base font-semibold text-foreground">
-                  {s.emoji} {s.label}
-                </p>
-                <p className="text-[12px] text-muted-foreground mt-1">
-                  {s.arabicLabel} · {s.items.length} dhikr
-                </p>
-                {s.type === suggestedType && (
-                  <span className="inline-block mt-2 text-[10px] text-gold font-medium uppercase tracking-wider">Suggested</span>
-                )}
-              </div>
-              <ChevronRight size={18} className="text-muted-foreground" />
-            </motion.button>
-          ))}
-        </div>
+          <div className="space-y-4 flex-1">
+            {SESSIONS.map((s, i) => (
+              <motion.button
+                key={s.type}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.08 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setSession(s)}
+                className={`w-full card-glass p-7 text-left tap-scale flex items-center justify-between hover:glow-emerald transition-all active:scale-95 ${
+                  s.type === suggestedType ? 'glow-emerald-strong border-emerald-light/30' : ''
+                }`}
+              >
+                <div>
+                  <p className="text-base font-semibold text-foreground">
+                    {s.emoji} {s.label}
+                  </p>
+                  <p className="text-[12px] text-muted-foreground mt-1 font-medium">
+                    {s.arabicLabel} · {s.items.length} dhikr
+                  </p>
+                  {s.type === suggestedType && (
+                    <span className="inline-block mt-2 text-[10px] text-emerald-light font-semibold uppercase tracking-wider bg-emerald-light/10 px-2 py-1 rounded">Suggested</span>
+                  )}
+                </div>
+                <motion.div whileHover={{ x: 4 }}>
+                  <ChevronRight size={20} className="text-emerald-light/60 group-hover:text-emerald-light transition-colors" />
+                </motion.div>
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
       </PageWrapper>
     );
   }
@@ -139,14 +145,19 @@ export default function DhikrPage() {
     return (
       <PageWrapper className="flex flex-col items-center justify-center text-center">
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5 }}>
-          <div className="w-20 h-20 rounded-full gradient-gold flex items-center justify-center mx-auto mb-6 glow-gold">
-            <Check size={32} className="text-accent-foreground" />
+          <div className="w-24 h-24 rounded-full bg-gradient-emerald flex items-center justify-center mx-auto mb-8 shadow-lg glow-emerald-strong">
+            <Check size={40} className="text-foreground font-bold" />
           </div>
-          <h2 className="text-2xl font-semibold text-foreground mb-2">Completed</h2>
-          <p className="text-sm text-muted-foreground mb-8">{session.label} finished. May Allah accept.</p>
-          <button onClick={reset} className="flex items-center gap-2 text-sm text-gold tap-scale mx-auto">
-            <RotateCcw size={14} /> Back to selection
-          </button>
+          <h2 className="text-2xl font-semibold text-foreground mb-3">Alhamdulillah</h2>
+          <p className="text-sm text-muted-foreground mb-8 font-medium">{session.label} finished. May Allah accept.</p>
+          <motion.button 
+            onClick={reset} 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-2 text-sm text-emerald-light hover:text-emerald-light/80 tap-scale mx-auto font-semibold"
+          >
+            <RotateCcw size={16} /> Back to selection
+          </motion.button>
         </motion.div>
       </PageWrapper>
     );
@@ -170,7 +181,7 @@ export default function DhikrPage() {
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center text-center">
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           <motion.div key={currentIndex} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }} className="w-full">
             <p className="text-[26px] leading-[2.2] font-arabic text-foreground mb-6" dir="rtl">{currentItem?.arabic}</p>
             <p className="text-[13px] text-gold-light/80 italic mb-2">{currentItem?.transliteration}</p>

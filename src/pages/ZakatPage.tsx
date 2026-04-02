@@ -33,100 +33,104 @@ export default function ZakatPage() {
   }, [cash, gold, silver, investments, debts, goldPrice, silverPrice, useGoldNisab]);
 
   const inputClass =
-    'w-full bg-secondary/40 border border-border/60 rounded-2xl px-4 py-3.5 text-foreground text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-gold/20 focus:border-gold/30 transition-all duration-250';
+    'w-full glass rounded-lg px-4 py-3.5 text-foreground text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-emerald-light/30 focus:border-emerald-light/50 transition-all duration-200 font-medium';
 
   return (
     <PageWrapper>
-      <header className="mb-8">
-        <h1 className="text-[26px] font-semibold text-foreground tracking-tight">Zakat Calculator</h1>
-        <p className="text-sm text-muted-foreground mt-1.5">Calculate your annual zakat obligation</p>
-      </header>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+        <header className="mb-8">
+          <h1 className="text-[26px] font-semibold text-foreground tracking-tight">Zakat Calculator</h1>
+          <p className="text-sm text-muted-foreground mt-1.5 font-medium">Calculate your annual zakat obligation</p>
+        </header>
 
-      <div className="space-y-5">
-        <div className="card-elevated p-6 space-y-5">
-          <h2 className="text-[11px] font-semibold text-gold uppercase tracking-[0.2em]">Assets</h2>
-          {[
-            { label: 'Cash & Bank Balances', value: cash, set: setCash },
-            { label: 'Gold Value', value: gold, set: setGold },
-            { label: 'Silver Value', value: silver, set: setSilver },
-            { label: 'Investments & Stocks', value: investments, set: setInvestments },
-          ].map((f) => (
-            <div key={f.label}>
-              <label className="text-[11px] text-muted-foreground mb-1.5 block font-medium">{f.label}</label>
+        <div className="space-y-6">
+          <div className="card-glass p-7 space-y-5">
+            <h2 className="text-[11px] font-semibold text-emerald-light uppercase tracking-[0.2em]">Assets</h2>
+            {[
+              { label: 'Cash & Bank Balances', value: cash, set: setCash },
+              { label: 'Gold Value', value: gold, set: setGold },
+              { label: 'Silver Value', value: silver, set: setSilver },
+              { label: 'Investments & Stocks', value: investments, set: setInvestments },
+            ].map((f) => (
+              <div key={f.label}>
+                <label className="text-[11px] text-muted-foreground mb-2 block font-semibold uppercase tracking-wide">{f.label}</label>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  placeholder="0.00"
+                  value={f.value}
+                  onChange={(e) => f.set(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="card-glass p-7 space-y-5">
+            <h2 className="text-[11px] font-semibold text-emerald-light uppercase tracking-[0.2em]">Liabilities</h2>
+            <div>
+              <label className="text-[11px] text-muted-foreground mb-2 block font-semibold uppercase tracking-wide">Debts & Obligations</label>
               <input
                 type="number"
                 inputMode="decimal"
                 placeholder="0.00"
-                value={f.value}
-                onChange={(e) => f.set(e.target.value)}
+                value={debts}
+                onChange={(e) => setDebts(e.target.value)}
                 className={inputClass}
               />
             </div>
-          ))}
-        </div>
-
-        <div className="card-elevated p-6 space-y-5">
-          <h2 className="text-[11px] font-semibold text-gold uppercase tracking-[0.2em]">Liabilities</h2>
-          <div>
-            <label className="text-[11px] text-muted-foreground mb-1.5 block font-medium">Debts & Obligations</label>
-            <input
-              type="number"
-              inputMode="decimal"
-              placeholder="0.00"
-              value={debts}
-              onChange={(e) => setDebts(e.target.value)}
-              className={inputClass}
-            />
           </div>
-        </div>
 
-        <div className="card-elevated p-6 space-y-5">
-          <h2 className="text-[11px] font-semibold text-gold uppercase tracking-[0.2em]">Nisab Standard</h2>
-          <div className="flex gap-2">
-            {[true, false].map((isGold) => (
-              <button
-                key={String(isGold)}
-                onClick={() => setUseGoldNisab(isGold)}
-                className={`flex-1 py-3 rounded-2xl text-sm font-medium transition-all duration-250 tap-scale ${
-                  useGoldNisab === isGold ? 'gradient-gold text-accent-foreground shadow-lg' : 'bg-secondary/50 text-muted-foreground'
-                }`}
-              >
-                {isGold ? 'Gold' : 'Silver'}
-              </button>
-            ))}
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-[11px] text-muted-foreground mb-1.5 block font-medium">Gold $/g</label>
-              <input type="number" value={goldPrice} onChange={(e) => setGoldPrice(e.target.value)} className={inputClass} />
+          <div className="card-glass p-7 space-y-5">
+            <h2 className="text-[11px] font-semibold text-emerald-light uppercase tracking-[0.2em]">Nisab Standard</h2>
+            <div className="flex gap-2 glass rounded-xl p-1.5">
+              {[true, false].map((isGold) => (
+                <button
+                  key={String(isGold)}
+                  onClick={() => setUseGoldNisab(isGold)}
+                  className={`flex-1 py-3 rounded-lg text-sm font-semibold transition-all duration-200 tap-scale ${
+                    useGoldNisab === isGold 
+                      ? 'bg-gradient-emerald text-foreground shadow-lg' 
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {isGold ? 'Gold' : 'Silver'}
+                </button>
+              ))}
             </div>
-            <div>
-              <label className="text-[11px] text-muted-foreground mb-1.5 block font-medium">Silver $/g</label>
-              <input type="number" value={silverPrice} onChange={(e) => setSilverPrice(e.target.value)} className={inputClass} />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-[11px] text-muted-foreground mb-2 block font-semibold uppercase tracking-wide">Gold $/g</label>
+                <input type="number" value={goldPrice} onChange={(e) => setGoldPrice(e.target.value)} className={inputClass} />
+              </div>
+              <div>
+                <label className="text-[11px] text-muted-foreground mb-2 block font-semibold uppercase tracking-wide">Silver $/g</label>
+                <input type="number" value={silverPrice} onChange={(e) => setSilverPrice(e.target.value)} className={inputClass} />
+              </div>
             </div>
           </div>
-        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className={`card-elevated p-8 text-center ${result.zakatDue ? 'glow-gold' : ''}`}
-        >
-          <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-2 font-medium">Your Zakat</p>
-          <p className={`text-[42px] font-semibold tabular-nums leading-none ${result.zakatDue ? 'text-gold' : 'text-foreground'}`}>
-            ${result.zakat.toFixed(2)}
-          </p>
-          <div className="h-px bg-border/30 my-5" />
-          <div className="flex justify-between text-[11px] text-muted-foreground">
-            <span>Nisab: ${result.nisab.toFixed(0)}</span>
-            <span>Net: ${result.total.toFixed(0)}</span>
-          </div>
-          {!result.zakatDue && result.total > 0 && (
-            <p className="text-xs text-emerald-glow mt-4">Below nisab threshold</p>
-          )}
-        </motion.div>
-      </div>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className={`card-glass p-8 text-center hover:glow-emerald-strong active:scale-95 transition-all ${result.zakatDue ? 'glow-emerald-strong border-emerald-light/20' : ''}`}
+          >
+            <p className="text-[10px] uppercase tracking-[0.3em] text-emerald-light/60 mb-3 font-semibold">Your Zakat Due</p>
+            <p className={`text-5xl font-bold tabular-nums leading-none mb-6 ${result.zakatDue ? 'text-emerald-light drop-shadow-lg' : 'text-muted-foreground'}`}>
+              ${result.zakat.toFixed(2)}
+            </p>
+            <div className="h-px bg-gradient-to-r from-transparent via-emerald-light/20 to-transparent mb-5" />
+            <div className="flex justify-between text-[11px] text-muted-foreground font-semibold">
+              <span>Nisab: <span className="text-foreground">${result.nisab.toFixed(0)}</span></span>
+              <span>Net: <span className="text-foreground">${result.total.toFixed(0)}</span></span>
+            </div>
+            {!result.zakatDue && result.total > 0 && (
+              <p className="text-xs text-emerald-light/70 mt-4 font-medium">Below nisab threshold</p>
+            )}
+          </motion.div>
+        </div>
+      </motion.div>
     </PageWrapper>
   );
 }

@@ -63,7 +63,7 @@ function StoryViewer({ story, onClose }: { story: HadithStory; onClose: () => vo
 
       {/* Content */}
       <div className="flex-1 flex items-center justify-center px-8">
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           <motion.div
             key={slideIndex}
             initial={{ opacity: 0, y: 20 }}
@@ -103,7 +103,7 @@ function StoryViewer({ story, onClose }: { story: HadithStory; onClose: () => vo
       </div>
 
       {/* Tap hint */}
-      <div className="pb-[env(safe-area-inset-bottom,20px)] pb-8 text-center">
+      <div className="pb-[calc(env(safe-area-inset-bottom,20px)+2rem)] text-center">
         <p className="text-[10px] text-white/20">Tap to continue</p>
       </div>
     </motion.div>
@@ -120,74 +120,85 @@ export default function HadithStoriesPage() {
   return (
     <>
       <PageWrapper>
-        <header className="mb-8">
-          <h1 className="text-[28px] font-semibold text-foreground tracking-tight">Hadith Stories</h1>
-          <p className="text-sm text-muted-foreground mt-2">Timeless wisdom, one story at a time</p>
-        </header>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+          <header className="mb-8">
+            <h1 className="text-[28px] font-semibold text-foreground tracking-tight">Hadith Stories</h1>
+            <p className="text-sm text-muted-foreground mt-2 font-medium">Timeless wisdom, one story at a time</p>
+          </header>
 
-        {/* Category pills */}
-        <div className="flex gap-2 overflow-x-auto pb-4 mb-6 -mx-1 px-1 no-scrollbar">
-          <button
-            onClick={() => setActiveCategory('all')}
-            className={`px-4 py-2 rounded-full text-[12px] font-medium whitespace-nowrap transition-all tap-scale ${
-              activeCategory === 'all' ? 'bg-gold/90 text-accent-foreground' : 'bg-secondary/30 text-muted-foreground'
-            }`}
-          >
-            All
-          </button>
-          {HADITH_CATEGORIES.map(cat => (
+          {/* Category pills */}
+          <motion.div className="flex gap-2 overflow-x-auto pb-4 mb-6 -mx-1 px-1 no-scrollbar glass rounded-2xl p-2">
             <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-4 py-2 rounded-full text-[12px] font-medium whitespace-nowrap transition-all tap-scale ${
-                activeCategory === cat.id ? 'bg-gold/90 text-accent-foreground' : 'bg-secondary/30 text-muted-foreground'
+              onClick={() => setActiveCategory('all')}
+              className={`px-4 py-2.5 rounded-xl text-[12px] font-semibold whitespace-nowrap transition-all tap-scale ${
+                activeCategory === 'all' 
+                  ? 'gradient-emerald text-foreground shadow-lg' 
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              {cat.emoji} {cat.label}
+              All
             </button>
-          ))}
-        </div>
+            {HADITH_CATEGORIES.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-4 py-2.5 rounded-xl text-[12px] font-semibold whitespace-nowrap transition-all tap-scale ${
+                  activeCategory === cat.id 
+                    ? 'gradient-emerald text-foreground shadow-lg' 
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {cat.emoji} {cat.label}
+              </button>
+            ))}
+          </motion.div>
 
-        {/* Story bubbles (horizontal) */}
-        <div className="flex gap-4 overflow-x-auto pb-6 -mx-1 px-1 no-scrollbar mb-8">
-          {filtered.map(story => (
-            <button
-              key={story.id}
-              onClick={() => setActiveStory(story)}
-              className="flex flex-col items-center gap-2 flex-shrink-0 tap-scale group transition-transform duration-300 hover:scale-110"
-            >
-              <div className={`w-[72px] h-[72px] rounded-full bg-gradient-to-br ${story.gradient} border-2 border-gold/30 flex items-center justify-center text-2xl shadow-xl group-hover:shadow-2xl transition-all duration-300`}>
-                {story.emoji}
-              </div>
-              <span className="text-[11px] text-muted-foreground w-[72px] text-center truncate">{story.title}</span>
-            </button>
-          ))}
-        </div>
+          {/* Story bubbles (horizontal) */}
+          <motion.div className="flex gap-4 overflow-x-auto pb-6 -mx-1 px-1 no-scrollbar mb-8">
+            {filtered.map(story => (
+              <motion.button
+                key={story.id}
+                onClick={() => setActiveStory(story)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex flex-col items-center gap-2 flex-shrink-0 group transition-all duration-300"
+              >
+                <div className={`w-[80px] h-[80px] rounded-full bg-gradient-to-br ${story.gradient} border-2 border-white/20 flex items-center justify-center text-3xl shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-all duration-300 glass-light`}>
+                  {story.emoji}
+                </div>
+                <span className="text-[11px] text-muted-foreground w-[80px] text-center truncate font-medium">{story.title}</span>
+              </motion.button>
+            ))}
+          </motion.div>
 
-        {/* Story cards */}
-        <motion.div
-          initial="hidden"
-          animate="show"
-          variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.06 } } }}
-          className="space-y-3"
-        >
-          {filtered.map(story => (
-            <motion.button
-              key={story.id}
-              variants={{ hidden: { opacity: 0, y: 6 }, show: { opacity: 1, y: 0 } }}
-              onClick={() => setActiveStory(story)}
-              className="w-full card-elevated p-5 text-left tap-scale flex items-center gap-4 group hover:bg-secondary/20 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-            >
-              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${story.gradient} flex items-center justify-center text-xl flex-shrink-0 shadow-md group-hover:shadow-lg transition-all duration-300`}>
-                {story.emoji}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[15px] font-semibold text-foreground">{story.title}</p>
-                <p className="text-[12px] text-muted-foreground mt-1 truncate">{story.slides[1]?.text.slice(0, 60)}…</p>
-              </div>
-              <span className="text-[10px] text-muted-foreground/50 capitalize flex-shrink-0">{story.category}</span>
-            </motion.button>
-          ))}
+          {/* Story cards */}
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.05 } } }}
+            className="space-y-4"
+          >
+            {filtered.map((story, idx) => (
+              <motion.button
+                key={story.id}
+                variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.05 }}
+                onClick={() => setActiveStory(story)}
+                className="w-full card-glass p-6 text-left tap-scale flex items-center gap-5 group hover:glow-emerald transition-all active:scale-95"
+              >
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${story.gradient} flex items-center justify-center text-xl flex-shrink-0 shadow-md group-hover:shadow-lg transition-all duration-300`}>
+                  {story.emoji}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[15px] font-semibold text-foreground">{story.title}</p>
+                  <p className="text-[12px] text-muted-foreground mt-1 truncate">{story.slides[1]?.text.slice(0, 60)}…</p>
+                </div>
+                <span className="text-[10px] text-muted-foreground/50 capitalize flex-shrink-0">{story.category}</span>
+              </motion.button>
+            ))}
+          </motion.div>
         </motion.div>
       </PageWrapper>
 

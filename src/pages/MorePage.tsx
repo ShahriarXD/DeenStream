@@ -6,12 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Compass, BookOpen, Calculator, Sparkles, Moon, Star, BookHeart, User, LogOut, BarChart3, ScrollText } from 'lucide-react';
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 6 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] as const } },
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] as const } },
 };
 const stagger = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.04 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.05 } },
 };
 
 const METHODS = [
@@ -53,95 +53,112 @@ export default function MorePage() {
         </motion.header>
 
         {/* Navigation */}
-        <motion.div variants={fadeUp} className="card-elevated divide-y divide-border/20 mb-8">
-          {navItems.map((item) => (
-            <button
+        <motion.div variants={fadeUp} className="card-glass divide-y divide-white/5 mb-8 overflow-hidden">
+          {navItems.map((item, idx) => (
+            <motion.button
               key={item.path}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: idx * 0.03 }}
               onClick={() => navigate(item.path)}
-              className="w-full flex items-center gap-4 px-5 py-4 tap-scale text-left hover:bg-secondary/20 transition-colors first:rounded-t-2xl last:rounded-b-2xl"
+              className="w-full flex items-center gap-4 px-6 py-4 tap-scale text-left hover:bg-white/5 transition-all active:scale-95 duration-200"
             >
-              <item.icon size={18} className="text-gold flex-shrink-0" />
-              <span className="text-sm font-medium text-foreground flex-1">{item.label}</span>
-              <ChevronRight size={14} className="text-muted-foreground/40" />
-            </button>
+              <item.icon size={20} className="text-emerald-light flex-shrink-0" />
+              <span className="text-sm font-semibold text-foreground flex-1">{item.label}</span>
+              <motion.div whileHover={{ x: 4 }}>
+                <ChevronRight size={16} className="text-emerald-light/50" />
+              </motion.div>
+            </motion.button>
           ))}
         </motion.div>
 
         {/* Account */}
-        <motion.div variants={fadeUp} className="card-elevated mb-8">
+        <motion.div variants={fadeUp} className="card-glass mb-8 p-6">
           {user ? (
-            <div className="p-5">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-10 h-10 rounded-2xl gradient-gold flex items-center justify-center">
-                  <User size={18} className="text-accent-foreground" />
+            <div>
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-emerald flex items-center justify-center">
+                  <User size={20} className="text-foreground" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">{user.email}</p>
-                  <p className="text-[11px] text-muted-foreground">Signed in</p>
+                  <p className="text-sm font-semibold text-foreground truncate">{user.email}</p>
+                  <p className="text-[11px] text-muted-foreground font-medium">Signed in</p>
                 </div>
               </div>
-              <button
+              <motion.button
                 onClick={signOut}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-secondary/30 text-sm font-medium text-muted-foreground tap-scale hover:bg-secondary/50 transition-colors"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-emerald-light tap-scale hover:bg-white/10 transition-all"
               >
-                <LogOut size={14} />
+                <LogOut size={16} />
                 Sign Out
-              </button>
+              </motion.button>
             </div>
           ) : (
-            <button
+            <motion.button
               onClick={() => navigate('/auth')}
-              className="w-full flex items-center gap-4 px-5 py-4 tap-scale text-left hover:bg-secondary/20 transition-colors rounded-2xl"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full flex items-center gap-4 tap-scale text-left hover:bg-white/5 transition-all rounded-xl active:scale-95"
             >
-              <User size={18} className="text-gold flex-shrink-0" />
-              <div className="flex-1">
-                <p className="text-sm font-medium text-foreground">Sign In / Sign Up</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Sync your progress across devices</p>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-emerald flex items-center justify-center flex-shrink-0">
+                <User size={20} className="text-foreground" />
               </div>
-              <ChevronRight size={14} className="text-muted-foreground/40" />
-            </button>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-foreground">Sign In / Sign Up</p>
+                <p className="text-[11px] text-muted-foreground mt-0.5 font-medium">Sync your progress across devices</p>
+              </div>
+              <ChevronRight size={16} className="text-emerald-light/50" />
+            </motion.button>
           )}
         </motion.div>
 
         {/* Settings */}
         <motion.div variants={fadeUp} className="mb-6">
-          <h2 className="text-[11px] uppercase tracking-[0.2em] text-gold/60 font-medium mb-3 px-1">Settings</h2>
-          <div className="card-elevated p-5 space-y-6">
+          <h2 className="text-[11px] uppercase tracking-[0.2em] text-emerald-light/60 font-semibold mb-4 px-1">Settings</h2>
+          <div className="card-glass p-7 space-y-7">
             <div>
-              <label className="text-[11px] text-muted-foreground font-medium mb-2 block">Calculation Method</label>
+              <label className="text-[11px] text-muted-foreground font-semibold mb-2.5 block uppercase tracking-wide">Calculation Method</label>
               <select
                 value={calculationMethod}
                 onChange={(e) => setCalculationMethod(Number(e.target.value))}
-                className="w-full bg-secondary/40 border border-border/60 rounded-2xl px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-gold/20 appearance-none"
+                className="w-full glass rounded-lg px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-light/30 transition-all font-medium"
               >
                 {METHODS.map((m) => (<option key={m.id} value={m.id}>{m.name}</option>))}
               </select>
             </div>
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-[11px] text-muted-foreground font-medium">Quran Font Size</label>
-                <span className="text-[11px] text-foreground tabular-nums font-mono">{quranFontSize}px</span>
+              <div className="flex items-center justify-between mb-3">
+                <label className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wide">Quran Font Size</label>
+                <span className="text-[11px] text-emerald-light tabular-nums font-semibold bg-emerald-light/10 px-2.5 py-1 rounded">{quranFontSize}px</span>
               </div>
-              <input type="range" min={16} max={36} value={quranFontSize} onChange={(e) => setQuranFontSize(Number(e.target.value))} className="w-full accent-gold h-1" />
+              <input type="range" min={16} max={36} value={quranFontSize} onChange={(e) => setQuranFontSize(Number(e.target.value))} className="w-full accent-emerald-light h-2 rounded-full" />
             </div>
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-[11px] text-muted-foreground font-medium">Gold Accent Intensity</label>
-                <span className="text-[11px] text-foreground tabular-nums font-mono">{accentIntensity}%</span>
+              <div className="flex items-center justify-between mb-3">
+                <label className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wide">Accent Intensity</label>
+                <span className="text-[11px] text-emerald-light tabular-nums font-semibold bg-emerald-light/10 px-2.5 py-1 rounded">{accentIntensity}%</span>
               </div>
-              <input type="range" min={20} max={100} value={accentIntensity} onChange={(e) => setAccentIntensity(Number(e.target.value))} className="w-full accent-gold h-1" />
+              <input type="range" min={20} max={100} value={accentIntensity} onChange={(e) => setAccentIntensity(Number(e.target.value))} className="w-full accent-emerald-light h-2 rounded-full" />
             </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-foreground">Night Mode</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Dimmer, calmer interface</p>
+            <div className="pt-2 border-t border-white/10">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-foreground">Night Mode</p>
+                  <p className="text-[11px] text-muted-foreground mt-1 font-medium">Dimmer, calmer interface</p>
+                </div>
+                <button
+                  onClick={() => setNightModeEnabled(!nightModeEnabled)}
+                  className={`w-12 h-6 rounded-full transition-all duration-300 relative border ${nightModeEnabled ? 'bg-gradient-emerald border-emerald-light/50' : 'bg-white/10 border-white/20'}`}
+                >
+                  <motion.div 
+                    animate={{ x: nightModeEnabled ? 24 : 2 }} 
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }} 
+                    className="absolute top-[2px] w-5 h-5 rounded-full bg-white/80" 
+                  />
+                </button>
               </div>
-              <button
-                onClick={() => setNightModeEnabled(!nightModeEnabled)}
-                className={`w-11 h-6 rounded-full transition-all duration-300 relative ${nightModeEnabled ? 'bg-gold' : 'bg-secondary'}`}
-              >
-                <motion.div animate={{ x: nightModeEnabled ? 22 : 3 }} transition={{ type: 'spring', stiffness: 500, damping: 30 }} className="absolute top-[3px] w-[18px] h-[18px] rounded-full bg-foreground" />
-              </button>
             </div>
           </div>
         </motion.div>

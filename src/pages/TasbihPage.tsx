@@ -39,65 +39,83 @@ export default function TasbihPage() {
 
   return (
     <PageWrapper className="flex flex-col items-center justify-center text-center">
-      <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-4 font-medium">Tasbih Counter</p>
-
-      <p className="text-3xl font-arabic text-gold mb-10 leading-relaxed">{currentDhikr}</p>
-
-      <div className="flex gap-2 mb-12">
-        {MODES.map((m) => (
-          <button
-            key={m.value}
-            onClick={() => { setTasbihMode(m.value); resetTasbih(); }}
-            className={`px-6 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200 tap-scale ${
-              tasbihMode === m.value
-                ? 'gradient-gold text-accent-foreground shadow-lg'
-                : 'bg-secondary/50 text-muted-foreground hover:text-foreground hover:bg-secondary'
-            }`}
-          >
-            {m.label}
-          </button>
-        ))}
-      </div>
-
-      <motion.button
-        animate={controls}
-        onClick={handleTap}
-        className="relative w-56 h-56 rounded-full flex items-center justify-center select-none tap-scale"
-        style={{
-          background: `conic-gradient(hsl(38 92% 50%) ${progress}%, hsl(160 20% 10%) ${progress}%)`,
-        }}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="w-full flex flex-col items-center justify-center"
       >
-        <div className="absolute inset-[5px] rounded-full bg-background flex flex-col items-center justify-center">
-          <motion.span
-            key={tasbihCount}
-            initial={{ scale: 1.1, opacity: 0.7 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.1 }}
-            className="text-[52px] font-semibold text-foreground tabular-nums leading-none"
-          >
-            {tasbihCount}
-          </motion.span>
-          {tasbihMode > 0 && (
-            <span className="text-sm text-muted-foreground mt-2 font-mono tabular-nums">/ {tasbihMode}</span>
-          )}
-          {completed && (
-            <motion.span
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-xs text-gold mt-3 font-medium"
+        <p className="text-[10px] uppercase tracking-[0.3em] text-emerald-light/60 mb-6 font-semibold">Tasbih Counter</p>
+
+        <p className="text-4xl font-arabic text-emerald-light mb-12 leading-relaxed drop-shadow-lg">{currentDhikr}</p>
+
+        <div className="flex gap-3 mb-16 glass rounded-2xl p-2">
+          {MODES.map((m) => (
+            <motion.button
+              key={m.value}
+              onClick={() => { setTasbihMode(m.value); resetTasbih(); }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
+                tasbihMode === m.value
+                  ? 'bg-gradient-emerald text-foreground shadow-lg'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
-              ✓ Completed
-            </motion.span>
-          )}
+              {m.label}
+            </motion.button>
+          ))}
         </div>
-      </motion.button>
 
-      <button
-        onClick={resetTasbih}
-        className="mt-10 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 tap-scale"
-      >
-        <RotateCcw size={14} /> Reset
-      </button>
+        <div className="relative mb-12">
+          <motion.button
+            animate={controls}
+            onClick={handleTap}
+            className="relative w-64 h-64 rounded-full flex items-center justify-center select-none tap-scale"
+            style={{
+              background: `conic-gradient(hsl(160 90% 55%) ${progress}%, hsl(160 20% 10%) ${progress}%)`,
+              boxShadow: `inset 0 0 60px rgba(0,0,0,0.3), 0 0 40px rgba(160, 200, 150, ${progress / 100 * 0.3})`
+            }}
+          >
+            <motion.div 
+              className="absolute inset-[8px] rounded-full glass-strong flex flex-col items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              <motion.span
+                key={tasbihCount}
+                initial={{ scale: 1.2, opacity: 0.6 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.15 }}
+                className="text-6xl font-bold text-foreground tabular-nums leading-none drop-shadow-lg"
+              >
+                {tasbihCount}
+              </motion.span>
+              {tasbihMode > 0 && (
+                <span className="text-sm text-muted-foreground mt-3 font-mono tabular-nums font-medium">/ {tasbihMode}</span>
+              )}
+              {completed && (
+                <motion.span
+                  initial={{ opacity: 0, scale: 0.8, y: -10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-xs text-emerald-light mt-4 font-bold tracking-wider"
+                >
+                  ✓ COMPLETED
+                </motion.span>
+              )}
+            </motion.div>
+          </motion.button>
+        </div>
+
+        <motion.button
+          onClick={resetTasbih}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-emerald-light hover:bg-white/10 px-5 py-2.5 rounded-xl transition-all duration-300 font-semibold"
+        >
+          <RotateCcw size={16} /> Reset
+        </motion.button>
+      </motion.div>
     </PageWrapper>
   );
 }

@@ -35,54 +35,63 @@ export default function DuasPage() {
 
   return (
     <PageWrapper>
-      <header className="mb-8">
-        <h1 className="text-[28px] font-semibold text-foreground tracking-tight">Duas & Azkar</h1>
-        <p className="text-sm text-muted-foreground mt-2">Daily supplications & remembrance</p>
-      </header>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="space-y-6"
+      >
+        <header className="mb-8">
+          <h1 className="text-[28px] font-semibold text-foreground tracking-tight">Duas & Azkar</h1>
+          <p className="text-sm text-muted-foreground mt-2 font-medium">Daily supplications & remembrance</p>
+        </header>
 
-      {/* Search */}
-      <div className="relative mb-8">
-        <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/50" />
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search duas & azkar..."
-          className="w-full bg-secondary/30 border border-border/40 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-gold/20 transition-all"
-        />
-      </div>
-
-      {/* Tabs */}
-      <div className="flex gap-2 mb-10">
-        {(['duas', 'azkar'] as Tab[]).map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`flex-1 py-3 rounded-2xl text-sm font-medium transition-all duration-300 tap-scale ${
-              tab === t ? 'gradient-gold text-accent-foreground' : 'bg-secondary/30 text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            {t === 'duas' ? 'Duas' : 'Azkar'}
-          </button>
-        ))}
-      </div>
-
-      <AnimatePresence mode="wait">
-        {tab === 'duas' ? (
-          <DuaCategoryList
-            key="duas"
-            categories={filteredDuas}
-            type="duas"
-            onSelect={(cat) => setSelectedDuaCategory(cat as DuaCategory)}
+        {/* Search */}
+        <div className="relative mb-8 group">
+          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-light/40 group-focus-within:text-emerald-light transition-colors" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search duas & azkar..."
+            className="form-input w-full pl-11 pr-4 py-4 text-sm placeholder:text-muted-foreground/50 focus:ring-2 focus:ring-emerald-light/20 focus:border-emerald-light/30"
           />
-        ) : (
-          <DuaCategoryList
-            key="azkar"
-            categories={filteredAzkar}
-            type="azkar"
-            onSelect={(cat) => setSelectedAzkarCategory(cat as AzkarCategory)}
-          />
-        )}
-      </AnimatePresence>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-2 mb-8 p-1 glass rounded-2xl">
+          {(['duas', 'azkar'] as Tab[]).map((t) => (
+            <motion.button
+              key={t}
+              onClick={() => setTab(t)}
+              layout
+              className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all duration-300 tap-scale ${
+                tab === t 
+                  ? 'bg-gradient-emerald text-foreground shadow-lg' 
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {t === 'duas' ? 'Duas' : 'Azkar'}
+            </motion.button>
+          ))}
+        </div>
+
+        <AnimatePresence>
+          {tab === 'duas' ? (
+            <DuaCategoryList
+              key="duas"
+              categories={filteredDuas}
+              type="duas"
+              onSelect={(cat) => setSelectedDuaCategory(cat as DuaCategory)}
+            />
+          ) : (
+            <DuaCategoryList
+              key="azkar"
+              categories={filteredAzkar}
+              type="azkar"
+              onSelect={(cat) => setSelectedAzkarCategory(cat as AzkarCategory)}
+            />
+          )}
+        </AnimatePresence>
+      </motion.div>
     </PageWrapper>
   );
 }
